@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 
-namespace RandomWord
+namespace RandomSatWords
 {
 	public partial class RandomWordGenerator : Form
 	{
@@ -14,92 +14,31 @@ namespace RandomWord
 
 		private void GenerateButton_Click(object sender, EventArgs e)
 		{
-			ResultBox.Text = "";
-            var howManyWords = 0;
-
-            try
-            {
-                howManyWords = int.Parse(NumberOfWordsTextBox.Text);
-            }
-            catch
-            {
-                howManyWords = 0;
-            }
-
-			var fromIndex = Array.FindIndex(WordBank.Words,
-				t => t.Equals(FromWordTextBox.Text, StringComparison.InvariantCultureIgnoreCase));
-			var toIndex = Array.FindIndex(WordBank.Words,
-				t => t.Equals(ToWordTextBox.Text, StringComparison.InvariantCultureIgnoreCase));
-
-			if (toIndex < fromIndex)
+			try
 			{
-				var temp = fromIndex;
-				fromIndex = toIndex;
-				toIndex = temp;
-			}
+				var fromWord = FromWordTextBox.Text;
+				var toWord = ToWordTextBox.Text;
+				var fromPage = (int) FromPageInput.Value;
+				var toPage = (int) ToPageInput.Value;
+				var howManyWords = (int) RangeInput.Value;
+				IEnumerable<string> words;
 
-            if (areInputsValid(fromIndex, toIndex, howManyWords))
-			{
-				var listOfIndex = new List<int>();
-				var random = new Random();
-
-				while (listOfIndex.Count < howManyWords)
+				if (!string.IsNullOrWhiteSpace(fromWord) && !string.IsNullOrWhiteSpace(toWord))
 				{
-					var rand = 0;
-
-					do
-					{
-						rand = random.Next(fromIndex, toIndex);
-					} while (listOfIndex.Contains(rand));
-
-					listOfIndex.Add(rand);
+					words = WordBank.GetWords(fromWord, toWord, howManyWords);
+				}
+				else
+				{
+					words = WordBank.GetWords(fromPage, toPage, howManyWords);
 				}
 
-				ShowWords(listOfIndex);
+				ShowWords(words.ToList());
 			}
-		}
-
-
-        private bool areInputsValid(int fromIndex, int toIndex, int range)
-        {
-            bool result = false;
-
-            if (fromIndex < 0 || toIndex < fromIndex)
-            {
-                MessageBox.Show("Cannot find the word(s)", "Error");
-            }
-            else
-            {
-                if (range == 0)
-                {
-                    MessageBox.Show("0 size range", "Error");
-                }
-                else if (range > (toIndex - fromIndex + 1))
-                {
-                    MessageBox.Show("Input range is larger than words range", "Error");
-                }
-                else
-                {
-                    result = true;
-                }
-            }
-
-            return result;
-        }
-
-
-		private void ShowWords(List<int> indices)
-		{
-			indices.Sort();
-			var stringBuilder = new StringBuilder();
-
-			foreach (var index in indices)
+			catch(Exception ex)
 			{
-				stringBuilder.Append(WordBank.Words[index]);
-				stringBuilder.Append(new string('\n', 5));
+				MessageBox.Show(ex.Message);
 			}
 
-			ResultBox.Text = stringBuilder.ToString();
 		}
 	}
 }
