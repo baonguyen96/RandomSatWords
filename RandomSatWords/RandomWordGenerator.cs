@@ -40,5 +40,17 @@ namespace RandomSatWords
 			}
 
 		}
+
+
+		private void HelpButton_Click(object sender, EventArgs e)
+		{
+			var info = $"Enter either a triple of (start word, end word, range) or " +
+			           $"(from page, to page, range) to get back result.\r\n" +
+			           $"Precedence: words over page.\r\n" +
+			           $"Word range must be a number of words between the start and end words.";
+			MessageBox.Show(info, "Information", MessageBoxButtons.OK);
+		}
+
+
 	}
 }

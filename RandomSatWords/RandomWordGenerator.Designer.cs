@@ -106,7 +106,7 @@
 			// 
 			// GenerateButton
 			// 
-			this.GenerateButton.Location = new System.Drawing.Point(1080, 128);
+			this.GenerateButton.Location = new System.Drawing.Point(1080, 119);
 			this.GenerateButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.GenerateButton.Name = "GenerateButton";
 			this.GenerateButton.Size = new System.Drawing.Size(136, 35);
@@ -188,8 +188,12 @@
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.FromWordTextBox);
 			this.Controls.Add(this.ResultBox);
+			this.HelpButton = true;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
+			this.HelpButtonClicked += HelpButton_Click;
 			this.Name = "RandomWordGenerator";
 			this.Text = "Random Word Generator";
 			((System.ComponentModel.ISupportInitialize)(this.FromPageInput)).EndInit();
